@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integra Labs - Investor Pitch Deck</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #020617;
+            --slide-bg: rgba(30, 41, 59, 0.7);
+            --accent-primary: #22d3ee; /* Cyan-400 */
+            --accent-secondary: #3b82f6; /* Blue-500 */
+            --accent-glow: rgba(34, 211, 238, 0.4);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: 'Urbanist', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            color: var(--text-main);
+        }
+
+        /* --- ANIMATED BACKGROUND --- */
+        .tech-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background-image: 
+                linear-gradient(rgba(34, 211, 238, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34, 211, 238, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
+            animation: gridMove 20s linear infinite;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0) translateZ(-200px); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px) translateZ(-200px); }
+        }
+
+        .glow-spot {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(34, 211, 238, 0.1) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- CONTROLS --- */
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            gap: 15px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+        
+        .controls:hover { opacity: 1; }
+
+        .btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--accent-primary);
+            color: #000;
+            box-shadow: 0 0 20px var(--accent-glow);
+            transform: scale(1.1);
+        }
+
+        /* --- SLIDE CONTAINER --- */
+        .deck-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(1.1);
+            padding: 4rem;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            z-index: 10;
+        }
+
+        /* --- CONTENT TYPOGRAPHY --- */
+        .content-wrapper {
+            max-width: 1300px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        h1 { font-size: 6rem; line-height: 1; font-weight: 900; margin-bottom: 1.5rem; text-shadow: 0 0 30px rgba(0,0,0,0.5); }
+        h2 { font-size: 4rem; font-weight: 800; color: var(--text-main); margin-bottom: 3rem; position: relative; display: inline-block; }
+        h2::after {
+            content: ''; position: absolute; bottom: -15px; left: 0; width: 80px; height: 6px; 
+            background: var(--accent-primary); border-radius: 3px;
+        }
+        
+        h3 { font-size: 2rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
+        p, li { font-size: 1.5rem; color: var(--text-muted); line-height: 1.6; }
+        
+        .highlight { color: var(--accent-primary); text-shadow: 0 0 20px var(--accent-glow); }
+        
+        /* --- ANIMATIONS KEYFRAMES --- */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
+            50% { box-shadow: 0 0 40px var(--accent-glow), 0 0 10px var(--accent-primary); }
+        }
+
+        /* --- APPLYING ANIMATIONS --- */
+        /* Initially hide everything that will animate */
+        .slide .anim { opacity: 0; }
+
+        /* Trigger animations when slide is active */
+        .slide.active .anim-fade-up { animation: fadeInUp 0.8s ease-out forwards; }
+        .slide.active .anim-slide-left { animation: slideInLeft 0.8s ease-out forwards; }
+        .slide.active .anim-scale { animation: scaleIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+        /* Stagger Delays */
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        .delay-6 { animation-delay: 0.6s; }
+        .delay-7 { animation-delay: 0.7s; }
+        .delay-8 { animation-delay: 0.8s; }
+        .delay-9 { animation-delay: 0.9s; }
+        .delay-10 { animation-delay: 1.0s; }
+
+        /* --- COMPONENTS --- */
+        
+        /* GRIDS */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; height: 100%; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
+        .grid-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+
+        /* CARDS */
+        .card {
+            background: var(--slide-bg);
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s;
+        }
+        .card:hover { 
+            transform: translateY(-10px); 
+            border-color: var(--accent-primary);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5); 
+        }
+        .card-icon { 
+            font-size: 3rem; 
+            color: var(--accent-primary); 
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            background: rgba(34, 211, 238, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+        }
+
+        /* BMC GRID */
+        .bmc-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 12px;
+            height: 65vh;
+        }
+        .bmc-box {
+            background: rgba(30, 41, 59, 0.6);
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+        }
+        .bmc-box h4 { color: var(--accent-primary); margin-bottom: 8px; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;}
+        .bmc-box ul { list-style: none; padding: 0; }
+        .bmc-box li { font-size: 0.9rem; margin-bottom: 4px; color: #cbd5e1; }
+        
+        /* PROTOTYPE BOX */
+        .prototype-container {
+            position: relative;
+            padding: 10px;
+            background: linear-gradient(45deg, transparent, rgba(34, 211, 238, 0.3), transparent);
+            border-radius: 20px;
+        }
+        .prototype-box {
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #475569;
+            flex-direction: column;
+            border: 1px solid #334155;
+            overflow: hidden;
+        }
+        .prototype-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* STATS */
+        .stat-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--accent-primary);
+            padding: 3rem;
+            border-radius: 2rem;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(34, 211, 238, 0.1);
+        }
+        .big-number { font-size: 7rem; font-weight: 900; color: var(--accent-primary); line-height: 1; margin-bottom: 10px;}
+        .number-label { font-size: 1.8rem; text-transform: uppercase; letter-spacing: 3px; color: #fff; }
+
+        /* TIMELINE */
+        .timeline { display: flex; justify-content: space-between; margin-top: 80px; position: relative; }
+        .timeline::before { content: ''; position: absolute; top: 25px; left: 0; width: 0%; height: 4px; background: var(--accent-primary); z-index: 0; transition: width 1.5s ease-out; }
+        .slide.active .timeline::before { width: 100%; } /* Animate Line */
+
+        .timeline-item { position: relative; z-index: 1; text-align: center; width: 25%; }
+        .dot { width: 50px; height: 50px; background: #0f172a; border: 4px solid var(--accent-primary); border-radius: 50%; margin: 0 auto 25px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #fff; box-shadow: 0 0 20px #000; }
+        
+        /* SLIDE COUNTER */
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            font-family: monospace;
+            color: #475569;
+            font-size: 1.2rem;
+        }
+
+        /* CUSTOM SCROLLBAR FOR BMC */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="tech-bg"></div>
+    <div class="glow-spot"></div>
+
+    <div class="deck-container">
+
+        <!-- SLIDE 1: INTRO -->
+        <div class="slide active" id="slide-1">
+            <div class="content-wrapper" style="text-align: center;">
+                <div class="anim anim-scale" style="font-size: 6rem; color: var(--accent-primary); margin-bottom: 30px; filter: drop-shadow(0 0 20px var(--accent-glow));">
+                    <i class="fa-solid fa-microchip"></i>
+                </div>
+                <h1 class="anim anim-fade-up delay-2">INTEGRA <span class="highlight">LABS</span></h1>
+                <p class="anim anim-fade-up delay-4" style="font-size: 2rem; max-width: 900px; margin: 0 auto; color: #cbd5e1;">
+                    The Future of Engineering Education.<br>One Device. Complete Lab.
+                </p>
+                <div class="anim anim-fade-up delay-6" style="margin-top: 60px;">
+                    <span style="padding: 15px 40px; border: 1px solid var(--accent-primary); border-radius: 50px; color: var(--accent-primary); font-weight: 600; letter-spacing: 2px; text-transform: uppercase; background: rgba(34, 211, 238, 0.05);">
+                        Investor Pitch Deck 2026
+                    </span>
+                </div>
+            </div>
+            <div class="slide-number">01 / 12</div>
+        </div>
+
+        <!-- SLIDE 2: PROBLEM -->
+        <div class="slide" id="slide-2">
+            <div class="content-wrapper">
+                <h2 class="anim anim-slide-left">The Pain Point</h2>
+                <div class="grid-3">
+                    <div class="card anim anim-fade-up delay-2">
+                        <div class="card-icon"><i class="fa-solid fa-money-bill-wave"></i></div>
+                        <h3>High Costs</h3>
+                        <p>Universities are forced to spend massive budgets on 10+ separate expensive devices for every single lab bench.</p>
+                    </div>
+                    <div class="card anim anim-fade-up delay-4">
+                        <div class="card-icon"><i class="fa-solid fa-shuffle"></i></div>
+                        <h3>Fragmentation</h3>
+                        <p>Students waste valuable lab time connecting incompatible kits and debugging wiring instead of learning concepts.</p>
+                    </div>
+                    <div class="card anim anim-fade-up delay-6">
+                        <div class="card-icon"><i class="fa-solid fa-ban"></i></div>
+                        <h3>Limited Access</h3>
+                        <p>Equipment scarcity means larger groups per bench, leaving many students with zero hands-on experience.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">02 / 12</div>
+        </div>
+
+        <!-- SLIDE 3: SOLUTION -->
+        <div class="slide" id="slide-3">
+            <div class="content-wrapper">
+                <div class="grid-2">
+                    <div>
+                        <h2 class="anim anim-slide-left">The Solution</h2>
+                        <h3 class="anim anim-fade-up delay-2" style="font-size: 3rem; margin-bottom: 30px; line-height: 1.2;">
+                            The Ultimate <br><span class="highlight">All-in-One</span> Platform.
+                        </h3>
+                        <p class="anim anim-fade-up delay-3">We integrated the functionality of an entire engineering lab into a single, compact, and affordable kit.</p>
+                        <ul class="anim anim-fade-up delay-4" style="list-style: none; margin-top: 40px;">
+                            <li style="margin-bottom: 20px; display: flex; align-items: center;"><i class="fa-solid fa-circle-check highlight" style="margin-right: 15px;"></i> 70% Cost Reduction</li>
+                            <li style="margin-bottom: 20px; display: flex; align-items: center;"><i class="fa-solid fa-circle-check highlight" style="margin-right: 15px;"></i> Compact & Portable</li>
+                            <li style="margin-bottom: 20px; display: flex; align-items: center;"><i class="fa-solid fa-circle-check highlight" style="margin-right: 15px;"></i> Plug & Play Curriculum</li>
+                        </ul>
+                    </div>
+                    <div class="anim anim-scale delay-3" style="display: flex; justify-content: center;">
+                        <div style="position: relative;">
+                            <div style="position: absolute; inset: 0; background: var(--accent-primary); filter: blur(60px); opacity: 0.2; border-radius: 50%;"></div>
+                            <i class="fa-solid fa-layer-group" style="font-size: 15rem; color: #fff; position: relative; z-index: 2; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));"></i>
+                            <div style="position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 1.5rem; white-space: nowrap; color: var(--accent-primary);">Integra Kit v1.0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">03 / 12</div>
+        </div>
+
+        <!-- SLIDE 4: TECH SPECS -->
+        <div class="slide" id="slide-4">
+            <div class="content-wrapper">
+                <h2 class="anim anim-slide-left">Engineering Core</h2>
+                <div class="grid-4">
+                    <div class="card anim anim-fade-up delay-1" style="border-top: 4px solid #3b82f6;">
+                        <h3 style="color:#3b82f6">Generation</h3>
+                        <ul>
+                            <li>Function Generator</li>
+                            <li>White/Pink Noise</li>
+                            <li>Sequence Generator</li>
+                            <li>Pulse Generator</li>
+                        </ul>
+                    </div>
+                    <div class="card anim anim-fade-up delay-3" style="border-top: 4px solid #10b981;">
+                        <h3 style="color:#10b981">Processing</h3>
+                        <ul>
+                            <li>Active Filters (LPF/HPF)</li>
+                            <li>Passive Filters</li>
+                            <li>Op-Amp Adder</li>
+                            <li>Logic Gates & Divider</li>
+                        </ul>
+                    </div>
+                    <div class="card anim anim-fade-up delay-5" style="border-top: 4px solid #f59e0b;">
+                        <h3 style="color:#f59e0b">Analysis</h3>
+                        <ul>
+                            <li>Small-scale Oscilloscope</li>
+                            <li>Pulse Counter</li>
+                            <li>Logic Probe</li>
+                            <li>Voltometer</li>
+                        </ul>
+                    </div>
+                    <div class="card anim anim-fade-up delay-7" style="border-top: 4px solid #ec4899;">
+                        <h3 style="color:#ec4899">I/O & Power</h3>
+                        <ul>
+                            <li>Sound Level Indicator</li>
+                            <li>Voltage Indicator</li>
+                            <li>Variable DC Supply</li>
+                            <li>Speaker Output</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">04 / 12</div>
+        </div>
+
+        <!-- SLIDE 5: PROTOTYPE -->
+        <div class="slide" id="slide-5">
+            <div class="content-wrapper">
+                <h2 class="anim anim-slide-left">The Prototype</h2>
+                <div class="grid-2">
+                    <div class="anim anim-fade-up delay-2">
+                        <h3>Tested & Operational</h3>
+                        <p>Our prototype successfully demonstrates the integration of analog signal processing and digital logic on a single board layout.</p>
+                        <ul style="margin-top: 30px;">
+                            <li style="margin-bottom: 15px;">✔ Validated PCB Layout</li>
+                            <li style="margin-bottom: 15px;">✔ Functional Signal Chain</li>
+                            <li style="margin-bottom: 15px;">✔ Educational Form Factor</li>
+                        </ul>
+                    </div>
+                    <div class="prototype-container anim anim-scale delay-4">
+                        <div class="prototype-box">
+                            <!-- Placeholder for the image uploaded by user -->
+                             <img src="assets/kit.png" alt="Prototype">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">05 / 12</div>
+        </div>
+
+        <!-- SLIDE 6: BMC -->
+        <div class="slide" id="slide-6">
+            <div class="content-wrapper">
+                <h2 class="anim anim-slide-left">Business Model Canvas</h2>
+                <div class="bmc-grid">
+                    <!-- Staggered animation for grid items -->
+                    <div class="bmc-box anim anim-scale delay-1" style="grid-row: span 2;">
+                        <h4>Key Partners</h4>
+                        <ul><li>Universities</li><li>PCB Suppliers</li><li>Training Centers</li></ul>
+                    </div>
+                    <div class="bmc-box anim anim-scale delay-2">
+                        <h4>Key Activities</h4>
+                        <ul><li>R&D Design</li><li>Assembly</li><li>QC Testing</li></ul>
+                    </div>
+                    <div class="bmc-box anim anim-scale delay-3" style="grid-row: span 2; background: rgba(34, 211, 238, 0.15); border: 1px solid var(--accent-primary);">
+                        <h4>Value Proposition</h4>
+                        <ul>
+                            <li style="color: #fff; font-weight: bold; margin-bottom: 8px;">All-in-One Lab</li>
+                            <li>70% Cost Saving</li>
+                            <li>Space Efficiency</li>
+                            <li>Curriculum Ready</li>
+                        </ul>
+                    </div>
+                    <div class="bmc-box anim anim-scale delay-4">
+                        <h4>Relationships</h4>
+                        <ul><li>Workshops</li><li>Tech Support</li><li>Community</li></ul>
+                    </div>
+                    <div class="bmc-box anim anim-scale delay-5" style="grid-row: span 2;">
+                        <h4>Segments</h4>
+                        <ul><li>Eng. Faculties</li><li>Tech Institutes</li><li>Hobbyists</li></ul>
+                    </div>
+                    <div class="bmc-box anim anim-scale delay-6">
+                        <h4>Key Resources</h4>
+                        <ul><li>Engineering Team</li><li>IP Designs</li></ul>
+                    </div>
+                    <div class="bmc-box anim anim-scale delay-7">
+                        <h4>Channels</h4>
+                        <ul><li>Direct B2B</li><li>Distributors</li><li>Website</li></ul>
+                    </div>
+                    <div class="bmc-box anim anim-scale delay-8" style="grid-column: span 2;">
+                        <h4>Cost Structure</h4>
+                        <ul><li>Manufacturing BOM</li><li>R&D Salaries</li><li>Marketing</li></ul>
+                    </div>
+                    <div class="bmc-box anim anim-scale delay-9" style="grid-column: span 3; border-color: #10b981; background: rgba(16, 185, 129, 0.1);">
+                        <h4 style="color: #10b981;">Revenue Streams</h4>
+                        <ul><li>Hardware Sales</li><li>Maintenance Contracts</li><li>Expansion Modules</li></ul>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">06 / 12</div>
+        </div>
+
+        <!-- SLIDE 7: VISION -->
+        <div class="slide" id="slide-7">
+            <div class="content-wrapper" style="text-align: center;">
+                <div class="anim anim-scale">
+                    <i class="fa-solid fa-quote-left" style="font-size: 5rem; color: #334155;"></i>
+                </div>
+                <h2 class="anim anim-fade-up delay-2" style="font-size: 3.5rem; color: #fff; line-height: 1.4; margin: 40px 0; border: none;">
+                    "To democratize engineering education by providing <span class="highlight">accessible</span>, <span class="highlight">integrated</span> tools that bridge the gap between theory and practice."
+                </h2>
+                <div class="anim anim-fade-up delay-4" style="font-size: 1.8rem; color: var(--accent-primary); letter-spacing: 2px;">
+                    — INTEGRA LABS VISION
+                </div>
+            </div>
+            <div class="slide-number">07 / 12</div>
+        </div>
+
+        <!-- SLIDE 8: USP -->
+        <div class="slide" id="slide-8">
+            <div class="content-wrapper">
+                <h2 class="anim anim-slide-left">Why We Win (USP)</h2>
+                <div class="grid-2" style="text-align: center;">
+                    <div class="stat-card anim anim-scale delay-2">
+                        <div class="big-number">70%</div>
+                        <div class="number-label">Cost Reduction</div>
+                        <p style="margin-top: 20px;">Compared to buying separate instruments.</p>
+                    </div>
+                    <div class="stat-card anim anim-scale delay-4">
+                        <div class="big-number">5<span style="font-size: 4rem;">in</span>1</div>
+                        <div class="number-label">Integrated Tools</div>
+                        <p style="margin-top: 20px;">Oscilloscope, Gen, Counters, Logic, & more.</p>
+                    </div>
+                </div>
+                <div class="anim anim-fade-up delay-6" style="text-align: center; margin-top: 60px; font-size: 1.8rem;">
+                    The <strong>Sweet Spot</strong>: <span style="color: var(--accent-primary);">High Functionality</span> at an <span style="color: #10b981;">Educational Price</span>.
+                </div>
+            </div>
+            <div class="slide-number">08 / 12</div>
+        </div>
+
+        <!-- SLIDE 9: TARGET AUDIENCE -->
+        <div class="slide" id="slide-9">
+            <div class="content-wrapper">
+                <h2 class="anim anim-slide-left">Target Audience</h2>
+                <div class="grid-3">
+                    <div class="card anim anim-fade-up delay-2">
+                        <div class="card-icon"><i class="fa-solid fa-building-columns"></i></div>
+                        <h3>Universities</h3>
+                        <p>Electrical & Communication Engineering faculties needing to upgrade labs efficiently.</p>
+                    </div>
+                    <div class="card anim anim-fade-up delay-4">
+                        <div class="card-icon"><i class="fa-solid fa-microscope"></i></div>
+                        <h3>Tech Institutes</h3>
+                        <p>Vocational training centers requiring durable, industrial-grade educational tools.</p>
+                    </div>
+                    <div class="card anim anim-fade-up delay-6">
+                        <div class="card-icon"><i class="fa-solid fa-house-laptop"></i></div>
+                        <h3>Hobbyists</h3>
+                        <p>Makers and students wanting a personal, professional lab setup at home.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">09 / 12</div>
+        </div>
+
+        <!-- SLIDE 10: SWOT -->
+        <div class="slide" id="slide-10">
+            <div class="content-wrapper">
+                <h2 class="anim anim-slide-left">SWOT Analysis</h2>
+                <div class="grid-2">
+                    <!-- Internal -->
+                    <div class="anim anim-fade-up delay-2" style="background: rgba(255,255,255,0.03); padding: 40px; border-radius: 20px;">
+                        <h3 style="border-bottom: 1px solid #444; padding-bottom: 15px; margin-bottom: 25px; color: #94a3b8;">INTERNAL</h3>
+                        <div style="margin-bottom: 30px;">
+                            <strong style="color: #10b981; font-size: 1.2rem; display: block; margin-bottom: 10px;">STRENGTHS</strong>
+                            <ul style="margin-left: 20px; font-size: 1.1rem;">
+                                <li>All-in-One Design</li>
+                                <li>High Profit Margin</li>
+                                <li>Educational UX</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <strong style="color: #ef4444; font-size: 1.2rem; display: block; margin-bottom: 10px;">WEAKNESSES</strong>
+                            <ul style="margin-left: 20px; font-size: 1.1rem;">
+                                <li>New Brand Recognition</li>
+                                <li>Initial Production Capacity</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- External -->
+                    <div class="anim anim-fade-up delay-4" style="background: rgba(255,255,255,0.03); padding: 40px; border-radius: 20px;">
+                        <h3 style="border-bottom: 1px solid #444; padding-bottom: 15px; margin-bottom: 25px; color: #94a3b8;">EXTERNAL</h3>
+                        <div style="margin-bottom: 30px;">
+                            <strong style="color: #3b82f6; font-size: 1.2rem; display: block; margin-bottom: 10px;">OPPORTUNITIES</strong>
+                            <ul style="margin-left: 20px; font-size: 1.1rem;">
+                                <li>Growing EdTech Market</li>
+                                <li>Strategic University Partnerships</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <strong style="color: #f59e0b; font-size: 1.2rem; display: block; margin-bottom: 10px;">THREATS</strong>
+                            <ul style="margin-left: 20px; font-size: 1.1rem;">
+                                <li>Global Low-Cost Competitors</li>
+                                <li>Supply Chain Volatility</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">10 / 12</div>
+        </div>
+
+        <!-- SLIDE 11: ROADMAP -->
+        <div class="slide" id="slide-11">
+            <div class="content-wrapper">
+                <h2 class="anim anim-slide-left">Roadmap to Scale</h2>
+                <div class="timeline">
+                    <div class="timeline-item anim anim-fade-up delay-2">
+                        <div class="dot">Q2</div>
+                        <h3 style="color: var(--accent-primary);">Refinement</h3>
+                        <p style="font-size: 1rem;">PCB Optimization</p>
+                    </div>
+                    <div class="timeline-item anim anim-fade-up delay-4">
+                        <div class="dot">Q3</div>
+                        <h3 style="color: var(--accent-primary);">Pilot</h3>
+                        <p style="font-size: 1rem;">50 Units Deployed</p>
+                    </div>
+                    <div class="timeline-item anim anim-fade-up delay-6">
+                        <div class="dot">Q4</div>
+                        <h3 style="color: var(--accent-primary);">Launch</h3>
+                        <p style="font-size: 1rem;">Mass Production</p>
+                    </div>
+                    <div class="timeline-item anim anim-fade-up delay-8">
+                        <div class="dot">27+</div>
+                        <h3 style="color: var(--accent-primary);">Expand</h3>
+                        <p style="font-size: 1rem;">Export & New Modules</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">11 / 12</div>
+        </div>
+
+        <div class="slide" id="slide-12">
+            <div class="content-wrapper" style="text-align: center;">
+                <div class="anim anim-scale" style="font-size: 6rem; color: var(--accent-primary); margin-bottom: 20px;">
+                    <i class="fa-solid fa-handshake"></i>
+                </div>
+                <h2 class="anim anim-fade-up delay-2" contenteditable="true" style="font-size: 5rem; border: none; margin-bottom: 30px;">Thank You</h2>
+                <p class="anim anim-fade-up delay-4" contenteditable="true" style="font-size: 2rem; color: #cbd5e1; margin-bottom: 50px;">
+                    Together, let's redefine engineering education.
+                </p>
+                
+                <div class="anim anim-fade-up delay-6" style="animation: pulseGlow 3s infinite;">
+                    <div style="background: rgba(15, 23, 42, 0.8); padding: 40px 60px; border-radius: 20px; border: 1px solid var(--accent-primary); display: inline-block;">
+                        <h3 style="margin-bottom: 10px; font-size: 2rem; color: #fff;" contenteditable="true">INTEGRA LABS</h3>
+                        <p style="margin-bottom: 5px; color: var(--accent-primary);" contenteditable="true">contact@integralabs.com</p>
+                        <p style="color: var(--text-muted); font-size: 1.2rem;" contenteditable="true">www.integralabs.com</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">12 / 12</div>
+        </div>
+
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <div class="btn" onclick="toggleFullScreen()" title="Fullscreen"><i class="fa-solid fa-expand"></i></div>
+        <div class="btn" onclick="prevSlide()" title="Previous"><i class="fa-solid fa-arrow-left"></i></div>
+        <div class="btn" onclick="nextSlide()" title="Next"><i class="fa-solid fa-arrow-right"></i></div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            // Bounds check
+            if (index < 0) index = 0;
+            if (index >= totalSlides) index = totalSlides - 1;
+            
+            currentSlide = index;
+
+            // Remove active class from all
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+
+            // Add active class to current
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+
+        // Fullscreen toggle
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
